@@ -7,8 +7,8 @@ const awsconfig = {
     oauth: {
       domain: 'us-east-2u6vqt05nv.auth.us-east-2.amazoncognito.com',
       scope: ['openid', 'email'],
-      redirectSignIn: 'https://to77sf.github.io/Aws3b/callback.html',
-      redirectSignOut: 'https://to77sf.github.io/Aws3b/index.html',
+      redirectSignIn: 'https://to777sf.github.io/Aws3b/callback.html',
+      redirectSignOut: 'https://to777sf.github.io/Aws3b/index.html',
       responseType: 'code'
     }
   },
