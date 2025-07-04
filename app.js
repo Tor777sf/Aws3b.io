@@ -107,3 +107,4 @@ function mostrarEstado(titulo, mensaje) {
     estado.innerHTML = `<h2>${titulo}</h2><p>${mensaje}</p>`;
   }
 }
+window.login = login;
