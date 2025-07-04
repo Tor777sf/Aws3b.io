@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Gestor de Archivos</title>
-  <script src="https://unpkg.com/aws-amplify@5.0.4/dist/aws-amplify.min.js"></script>
+  <title>Inicio de sesión con Cognito</title>
+  <script src="https://unpkg.com/aws-amplify@4.3.13/dist/aws-amplify.min.js"></script>  
   <script defer src="app.js"></script>
 </head>
 <body>
-  <h1>Gestor de Archivos S3</h1>
-
+  <h1>Bienvenido</h1>
   <button onclick="login()">Iniciar sesión</button>
-  <button onclick="logout()">Cerrar sesión</button>
-
-  <input type="file" id="fileInput" />
-  <button onclick="subir()">Subir archivo</button>
-
-  <ul id="fileList">Archivos aquí…</ul>
 </body>
 </html>

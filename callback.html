@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Redireccionando...</title>
-  <script src="https://unpkg.com/aws-amplify@5.0.4/dist/aws-amplify.min.js"></script>
+  <title>Gestor de Archivos</title>
+  <style>
+    #estado, #fileList { margin-top: 20px; }
+    #fileList { list-style-type: none; padding: 0; }
+    li { margin-bottom: 10px; }
+    .progress-bar { width: 100%; height: 20px; background-color: #ddd; margin-top: 10px; }
+    .progress { height: 100%; background-color: #4caf50; width: 0; }
+  </style>
+  <script src="https://unpkg.com/aws-amplify@4.3.13/dist/aws-amplify.min.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
-  <p>Redirigiendo...</p>
+  <div id="estado">Cargando sesión...</div>
+
+  <h2>Subir un archivo</h2>
+  <input type="file" id="fileInput" />
+  <button id="uploadBtn">Subir archivo</button>
+  <div class="progress-bar" id="progressContainer" style="display: none;">
+    <div class="progress" id="progressBar"></div>
+  </div>
+
+  <h3>Archivos en tu carpeta:</h3>
+  <ul id="fileList"></ul>
 </body>
 </html>
