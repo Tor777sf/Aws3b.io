@@ -29,16 +29,18 @@ function login() {
 }
 
 // Detectar usuario autenticado y preparar la interfaz
-Auth.currentAuthenticatedUser()
-  .then(async user => {
-    mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
-    await crearCarpetaSiNoExiste();
-    obtenerArchivos();
-    document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
-  })
-  .catch(() => {
-    console.log("Usuario no autenticado.");
-  });
+if (window.location.pathname.includes("callback.html")) {
+  Auth.currentAuthenticatedUser()
+    .then(async user => {
+      mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
+      await crearCarpetaSiNoExiste();
+      obtenerArchivos();
+      document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
+    })
+    .catch(() => {
+      console.log("Usuario no autenticado.");
+    });
+}
 
 // Crear carpeta vacía si no existe
 async function crearCarpetaSiNoExiste() {
