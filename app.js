@@ -1,3 +1,8 @@
+// Hacer login accesible globalmente
+window.login = function () {
+  window.Amplify.Auth.federatedSignIn();
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const awsconfig = {
     Auth: {
@@ -24,27 +29,19 @@ document.addEventListener("DOMContentLoaded", () => {
   window.Amplify.configure(awsconfig);
   const { Auth, Storage } = window.Amplify;
 
-  // Función de login
-  function login() {
-    Auth.federatedSignIn();
-  }
-  window.login = login;
-
-  // Solo ejecutar lógica de usuario si estamos en callback.html
   if (window.location.pathname.includes("callback.html")) {
     Auth.currentAuthenticatedUser()
-      .then(async user => {
+      .then(async () => {
         mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
         await crearCarpetaSiNoExiste();
         obtenerArchivos();
         document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
       })
       .catch(() => {
-        console.log("Usuario no autenticado.");
+        mostrarEstado("Error", "No se pudo autenticar al usuario.");
       });
   }
 
-  // Crear carpeta vacía si no existe
   async function crearCarpetaSiNoExiste() {
     try {
       const archivos = await Storage.list('', { level: 'private' });
@@ -57,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Subir archivo con barra de progreso
   async function subirArchivo() {
     const file = document.getElementById("fileInput").files[0];
     if (!file) return alert("Selecciona un archivo.");
@@ -67,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     progressBar.style.width = '0%';
 
     try {
-      const upload = Storage.put(file.name, file, {
+      await Storage.put(file.name, file, {
         level: 'private',
         contentType: file.type,
         progressCallback(progress) {
@@ -75,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
           progressBar.style.width = `${percent}%`;
         }
       });
-      await upload;
       mostrarEstado("Éxito", "Archivo subido correctamente.");
       obtenerArchivos();
     } catch (error) {
@@ -86,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Listar archivos del usuario
   async function obtenerArchivos() {
     try {
       const archivos = await Storage.list('', { level: 'private' });
@@ -102,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Mostrar mensajes en la interfaz
   function mostrarEstado(titulo, mensaje) {
     const estado = document.getElementById("estado");
     if (estado) {
