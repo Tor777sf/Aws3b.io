@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
       oauth: {
         domain: 'us-east-2u6vqt05nv.auth.us-east-2.amazoncognito.com',
         scope: ['openid', 'email'],
-        redirectSignIn: 'https://tor777sf.github.io/Aws3b.io/callback.html',
-        redirectSignOut: 'https://tor777sf.github.io/Aws3b.io/index.html',
+        redirectSignIn: 'https://tor777sf.github.io/Aws3b.io/callback',
+        redirectSignOut: 'https://tor777sf.github.io/Aws3b.io/',
         responseType: 'code'
       }
     },
