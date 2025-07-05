@@ -1,9 +1,8 @@
-// Hacer login accesible globalmente
-window.login = function () {
-  window.Amplify.Auth.federatedSignIn();
-};
-
 document.addEventListener("DOMContentLoaded", () => {
+  const Amplify = aws_amplify.Amplify;
+  const Auth = aws_amplify.Auth;
+  const Storage = aws_amplify.Storage;
+
   const awsconfig = {
     Auth: {
       region: 'us-east-2',
@@ -26,8 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  window.Amplify.configure(awsconfig);
-  const { Auth, Storage } = window.Amplify;
+  Amplify.configure(awsconfig);
+
+  window.login = function () {
+    Auth.federatedSignIn();
+  };
 
   if (window.location.pathname.includes("callback.html")) {
     Auth.currentAuthenticatedUser()

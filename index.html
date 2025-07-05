@@ -2,12 +2,36 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Inicio de sesión con Cognito</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de sesión</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/aws-amplify@4.3.13/dist/aws-amplify.min.js"></script>
-  <script src="app.js"></script>
+  <script defer src="app.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      background-color: #0073e6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005bb5;
+    }
+  </style>
 </head>
 <body>
-  <h1>Bienvenido</h1>
-  <button onclick="login()">Iniciar sesión</button>
+  <main>
+    <h1>Bienvenido</h1>
+    <p>Por favor, inicia sesión para acceder a tu gestor de archivos seguro.</p>
+    <button onclick="login()">Iniciar sesión</button>
+  </main>
 </body>
 </html>
