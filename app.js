@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Auth.federatedSignIn();
   };
 
-  if (window.location.pathname.includes("callback.html")) {
+  if (window.location.pathname.includes("callback")) {
     Auth.currentAuthenticatedUser()
       .then(async () => {
         mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
