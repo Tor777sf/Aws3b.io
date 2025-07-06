@@ -32,17 +32,19 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   if (window.location.pathname.includes("callback")) {
-    Auth.currentAuthenticatedUser()
-      .then(async () => {
-        mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
-        await crearCarpetaSiNoExiste();
-        obtenerArchivos();
-        document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
-      })
-      .catch(() => {
-        mostrarEstado("Error", "No se pudo autenticar al usuario.");
-      });
-  }
+  Auth.currentSession()
+    .then(async session => {
+      const user = await Auth.currentAuthenticatedUser();
+      mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
+      await crearCarpetaSiNoExiste();
+      obtenerArchivos();
+      document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
+    })
+    .catch(error => {
+      console.error("Error en sesión:", error);
+      mostrarEstado("Error", "No se pudo autenticar al usuario.");
+    });
+}
 
   async function crearCarpetaSiNoExiste() {
     try {
