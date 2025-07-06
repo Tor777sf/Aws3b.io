@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       userPoolWebClientId: '61eh7lv1aa15spci69v95qpg2s',
       identityPoolId: 'us-east-2:7cfbef35-86b2-449c-937d-1b3f68442c54',
       oauth: {
-        domain: 'us-east-2u6vqt05nv.auth.us-east-2.amazoncognito.com',
+        domain: 'us-east-2_u6vqt05nv.auth.us-east-2.amazoncognito.com',
         scope: ['openid', 'email'],
         redirectSignIn: 'https://tor777sf.github.io/Aws3b.io/callback',
         redirectSignOut: 'https://tor777sf.github.io/Aws3b.io/',
