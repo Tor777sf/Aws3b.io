@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         scope: ['openid', 'email'],
         redirectSignIn: 'https://tor777sf.github.io/Aws3b.io/callback',
         redirectSignOut: 'https://tor777sf.github.io/Aws3b.io/',
-        responseType: 'token'
+        responseType: 'code'
       }
     },
     Storage: {
