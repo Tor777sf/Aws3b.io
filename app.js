@@ -32,17 +32,34 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   if (window.location.pathname.includes("callback")) {
-  Auth.currentSession()
-    .then(async session => {
-      const user = await Auth.currentAuthenticatedUser();
-      mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
+  Hub.listen('auth', async ({ payload }) => {
+    if (payload.event === 'signIn') {
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
+        await crearCarpetaSiNoExiste();
+        obtenerArchivos();
+        document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
+      } catch (error) {
+        console.error("Error obteniendo usuario:", error);
+        mostrarEstado("Error", "No se pudo obtener el usuario.");
+      }
+    } else if (payload.event === 'signIn_failure') {
+      console.error("Fallo en inicio de sesión:", payload.data);
+      mostrarEstado("Error", "Fallo en el inicio de sesión.");
+    }
+  });
+
+  // Intenta detectar si ya está autenticado (por ejemplo, recargando callback)
+  Auth.currentAuthenticatedUser()
+    .then(async user => {
+      mostrarEstado("¡Autenticación detectada!", "Ya puedes subir y ver tus archivos.");
       await crearCarpetaSiNoExiste();
       obtenerArchivos();
       document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
     })
-    .catch(error => {
-      console.error("Error en sesión:", error);
-      mostrarEstado("Error", "No se pudo autenticar al usuario.");
+    .catch(() => {
+      // Nada, esperamos a Hub.listen
     });
 }
 
