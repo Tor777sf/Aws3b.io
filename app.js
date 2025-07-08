@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const Amplify = aws_amplify.Amplify;
   const Auth = aws_amplify.Auth;
   const Storage = aws_amplify.Storage;
-
+  const Hub = aws_amplify.Hub;
   const awsconfig = {
     Auth: {
       region: 'us-east-2',
