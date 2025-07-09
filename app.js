@@ -57,6 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
       await crearCarpetaSiNoExiste();
       obtenerArchivos();
       document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
+document.getElementById("userInfo").textContent = `Sesión: ${user.attributes?.email || user.username}`;
+
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+  await Auth.signOut();
+  window.location.href = "/Aws3b.io/";
+});
+
     })
     .catch(() => {
       // Nada, esperamos a Hub.listen
@@ -102,20 +109,71 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function obtenerArchivos() {
-    try {
-      const archivos = await Storage.list('', { level: 'private' });
-      const fileList = document.getElementById("fileList");
-      fileList.innerHTML = archivos.length === 0
-        ? '<li>Tu carpeta está vacía.</li>'
-        : archivos
-            .filter(f => f.key !== '.init')
-            .map(f => `<li>${f.key}</li>`)
-            .join('');
-    } catch (error) {
-      console.error("Error al listar archivos:", error);
-    }
+async function obtenerArchivos() {
+  try {
+    const archivos = await Storage.list('', { level: 'private' });
+    const fileList = document.getElementById("fileList");
+    fileList.innerHTML = archivos.length === 0
+      ? '<li>Tu carpeta está vacía.</li>'
+      : archivos
+          .filter(f => f.key !== '.init')
+          .map(f => `
+            <li>
+              <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">${f.key}</strong><br>
+              <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+              <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+              <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+              <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+            </li>
+          `)
+          .join('');
+  } catch (error) {
+    console.error("Error al listar archivos:", error);
   }
+}
+
+  window.abrirArchivo = async function(nombreArchivo) {
+  const url = await Storage.get(nombreArchivo, { level: 'private' });
+  window.open(url, '_blank');
+};
+
+window.descargarArchivo = async function(nombreArchivo) {
+  const url = await Storage.get(nombreArchivo, { level: 'private' });
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = nombreArchivo;
+  link.click();
+};
+
+window.renombrarArchivo = async function(nombreOriginal) {
+  const nuevoNombre = prompt("Nuevo nombre para el archivo:", nombreOriginal);
+  if (!nuevoNombre || nuevoNombre === nombreOriginal) return;
+
+  try {
+    const archivo = await Storage.get(nombreOriginal, { download: true, level: 'private' });
+    await Storage.put(nuevoNombre, archivo.Body, { level: 'private', contentType: archivo.ContentType });
+    await Storage.remove(nombreOriginal, { level: 'private' });
+    mostrarEstado("Éxito", `Archivo renombrado a ${nuevoNombre}`);
+    obtenerArchivos();
+  } catch (e) {
+    console.error(e);
+    mostrarEstado("Error", "No se pudo renombrar.");
+  }
+};
+
+window.compartirArchivo = async function(nombreArchivo) {
+  const url = await Storage.get(nombreArchivo, { level: 'private', expires: 3600 });
+  prompt("Enlace válido por 1 hora:", url);
+};
+
+window.eliminarArchivo = async function(nombreArchivo) {
+  if (!confirm(`¿Eliminar "${nombreArchivo}"?`)) return;
+  await Storage.remove(nombreArchivo, { level: 'private' });
+  mostrarEstado("Éxito", `"${nombreArchivo}" eliminado.`);
+  obtenerArchivos();
+};
+
+  
 
   function mostrarEstado(titulo, mensaje) {
     const estado = document.getElementById("estado");
@@ -124,3 +182,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+
