@@ -162,9 +162,32 @@ window.renombrarArchivo = async function(nombreOriginal) {
 };
 
 window.compartirArchivo = async function(nombreArchivo) {
-  const url = await Storage.get(nombreArchivo, { level: 'private', expires: 3600 });
-  prompt("Enlace válido por 1 hora:", url);
+  try {
+    const url = await Storage.get(nombreArchivo, {
+      level: 'private',
+      expires: 3600 // 1 hora
+    });
+
+    if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      // 📱 Móvil con soporte para navigator.share
+      await navigator.share({
+        title: "Archivo compartido",
+        text: "Te comparto este archivo:",
+        url: url
+      });
+      mostrarEstado("Compartido", "El enlace fue enviado correctamente.");
+    } else {
+      // 🖥️ Escritorio u otro navegador sin share nativo
+      await navigator.clipboard.writeText(url);
+      mostrarEstado("Enlace copiado", "Tu navegador no soporta compartir directo, pero el enlace fue copiado.");
+    }
+
+  } catch (error) {
+    console.error("Error al compartir archivo:", error);
+    mostrarEstado("Error", "No se pudo generar o compartir el enlace.");
+  }
 };
+
 
 window.eliminarArchivo = async function(nombreArchivo) {
   if (!confirm(`¿Eliminar "${nombreArchivo}"?`)) return;
