@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   Amplify.configure(awsconfig);
+  
+  let currentPath = ""; // Carpeta actual, raíz por defecto
 
   window.login = function () {
     Auth.federatedSignIn();
@@ -111,26 +113,32 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
 
 async function obtenerArchivos() {
   try {
-    const archivos = await Storage.list('', { level: 'private' });
+    const archivos = await Storage.list(currentPath, { level: 'private' });
     const fileList = document.getElementById("fileList");
-    fileList.innerHTML = archivos.length === 0
-      ? '<li>Tu carpeta está vacía.</li>'
-      : archivos
-          .filter(f => f.key !== '.init')
-          .map(f => `
-            <li>
-              <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">${f.key}</strong><br>
-              <button onclick="descargarArchivo('${f.key}')">Descargar</button>
-              <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
-              <button onclick="compartirArchivo('${f.key}')">Compartir</button>
-              <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
-            </li>
-          `)
-          .join('');
+
+    const carpetas = archivos.filter(f => f.key.endsWith('/') && f.size === 0);
+    const archivosSueltos = archivos.filter(f => !f.key.endsWith('/') && f.key !== '.init');
+
+    fileList.innerHTML = `
+      ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
+      ${carpetas.map(c => `
+        <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
+      `).join('')}
+      ${archivosSueltos.map(f => `
+        <li>
+          <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${f.key.replace(currentPath, '')}</strong><br>
+          <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+          <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+          <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+          <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+        </li>
+      `).join('')}
+    `;
   } catch (error) {
     console.error("Error al listar archivos:", error);
   }
 }
+
 
   window.abrirArchivo = async function(nombreArchivo) {
   const url = await Storage.get(nombreArchivo, { level: 'private' });
@@ -204,6 +212,34 @@ window.eliminarArchivo = async function(nombreArchivo) {
       estado.innerHTML = `<h2>${titulo}</h2><p>${mensaje}</p>`;
     }
   }
+  
+  window.entrarCarpeta = function(nombreCarpeta) {
+  currentPath = nombreCarpeta;
+  obtenerArchivos();
+};
+
+window.irAtras = function() {
+  if (!currentPath) return;
+  const partes = currentPath.split('/').filter(p => p);
+  partes.pop();
+  currentPath = partes.length ? partes.join('/') + '/' : '';
+  obtenerArchivos();
+};
+
+  window.crearCarpeta = async function() {
+  const nombre = document.getElementById("newFolderName").value.trim();
+  if (!nombre) return;
+
+  const carpetaPath = currentPath + nombre + '/';
+  try {
+    await Storage.put(carpetaPath, '', { level: 'private' });
+    obtenerArchivos();
+  } catch (e) {
+    mostrarEstado("Error", "No se pudo crear la carpeta.");
+  }
+}
+
+  
 });
 
 
