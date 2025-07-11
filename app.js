@@ -228,19 +228,31 @@ window.irAtras = function() {
   obtenerArchivos();
 };
 
-  window.crearCarpeta = async function() {
+  
+window.crearCarpeta = async function() {
   const nombre = document.getElementById("newFolderName").value.trim();
   if (!nombre) return;
 
-  const carpetaPath = currentPath + nombre + '/texto.txt';
   try {
-    await Storage.put(carpetaPath, '', { level: 'private' });
+    const user = await Auth.currentAuthenticatedUser();
+    const sub = user.attributes.sub;
+
+    const carpetaPath = `private/${sub}/${nombre}/.init.txt`;
+    console.log("Forzando ruta de carpeta:", carpetaPath);
+
+    await Storage.put(carpetaPath, 'temp', {
+      level: 'private',
+      contentType: 'text/plain'
+    });
+
+    mostrarEstado("Éxito", "Carpeta creada correctamente.");
     obtenerArchivos();
   } catch (e) {
-    console.error("Error exacto al crear carpeta:", e);
+    console.error("Error exacto al crear carpeta:", e.message || e);
     mostrarEstado("Error", "No se pudo crear la carpeta.");
   }
 }
+
 
   
 });
