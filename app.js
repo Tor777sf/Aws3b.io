@@ -232,7 +232,7 @@ window.irAtras = function() {
   const nombre = document.getElementById("newFolderName").value.trim();
   if (!nombre) return;
 
-  const carpetaPath = currentPath + nombre + '/';
+  const carpetaPath = currentPath + nombre + '/.texto.txt';
   try {
     await Storage.put(carpetaPath, '', { level: 'private' });
     obtenerArchivos();
