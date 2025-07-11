@@ -235,7 +235,7 @@ window.crearCarpeta = async function() {
 
   try {
     const user = await Auth.currentAuthenticatedUser();
-    const sub = user.attributes.sub;
+    const sub = user.username;
 
     const carpetaPath = `private/${sub}/${nombre}/.init.txt`;
     console.log("Forzando ruta de carpeta:", carpetaPath);
