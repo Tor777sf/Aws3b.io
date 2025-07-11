@@ -234,7 +234,7 @@ window.crearCarpeta = async function() {
   if (!nombre) return;
 
   try {
-    const carpetaPath = `${currentPath}${nombre}/.init.txt`;
+    const carpetaPath = `${currentPath}${nombre}/`;
     console.log("Ruta real de carpeta:", carpetaPath);
 
     await Storage.put(carpetaPath, 'temp', {
