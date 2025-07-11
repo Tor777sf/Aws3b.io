@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const user = await Auth.currentAuthenticatedUser();
         mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
         await crearCarpetaSiNoExiste();
-        await Storage.put("nombreCarp/*", "test", { level: "private" });
+        await Storage.put("nombreCar", "test", { level: "private" });
 
         obtenerArchivos();
         document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
