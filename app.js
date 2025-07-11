@@ -234,9 +234,10 @@ window.irAtras = function() {
 
   const carpetaPath = currentPath + nombre + '/';
   try {
-    await Storage.put(carpetaPath, 'texto.txt', { level: 'private' });
+    await Storage.put(carpetaPath, '', { level: 'private' });
     obtenerArchivos();
   } catch (e) {
+    console.error("Error exacto al crear carpeta:", e);
     mostrarEstado("Error", "No se pudo crear la carpeta.");
   }
 }
