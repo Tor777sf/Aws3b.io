@@ -234,11 +234,8 @@ window.crearCarpeta = async function() {
   if (!nombre) return;
 
   try {
-    const user = await Auth.currentAuthenticatedUser();
-    const sub = user.username;
-
-    const carpetaPath = `private/${sub}/${nombre}/.init.txt`;
-    console.log("Forzando ruta de carpeta:", carpetaPath);
+    const carpetaPath = `${currentPath}${nombre}/.init.txt`;
+    console.log("Ruta real de carpeta:", carpetaPath);
 
     await Storage.put(carpetaPath, 'temp', {
       level: 'private',
@@ -252,6 +249,7 @@ window.crearCarpeta = async function() {
     mostrarEstado("Error", "No se pudo crear la carpeta.");
   }
 }
+
 
 
   
