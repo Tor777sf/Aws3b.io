@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const user = await Auth.currentAuthenticatedUser();
         mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
         await crearCarpetaSiNoExiste();
-        await Storage.put("nombreCarp/", "test", { level: "private" });
+        await Storage.put("nombreCarp/*", "test", { level: "private" });
 
         obtenerArchivos();
         document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
@@ -232,9 +232,9 @@ window.irAtras = function() {
   const nombre = document.getElementById("newFolderName").value.trim();
   if (!nombre) return;
 
-  const carpetaPath = currentPath + nombre + '/texto.txt';
+  const carpetaPath = currentPath + nombre + '/';
   try {
-    await Storage.put(carpetaPath, '', { level: 'private' });
+    await Storage.put(carpetaPath, 'texto.txt', { level: 'private' });
     obtenerArchivos();
   } catch (e) {
     mostrarEstado("Error", "No se pudo crear la carpeta.");
