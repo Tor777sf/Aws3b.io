@@ -121,8 +121,9 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
 
 async function obtenerArchivos() {
   try {
-    listadoCompleto = archivos;
+    
     const archivos = await Storage.list(currentPath, { level: 'private' });
+   listadoCompleto = archivos;
     const fileList = document.getElementById("fileList");
     const carpetas = archivos.filter(f => f.key.endsWith('/'));
 
