@@ -119,41 +119,67 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
     }
   }
 
-async function obtenerArchivos() {
+////////////////////////////////)//////////////
+  async function obtenerArchivos() {
   try {
-    
     const archivos = await Storage.list(currentPath, { level: 'private' });
-   listadoCompleto = archivos;
+    listadoCompleto = archivos;
+
     const fileList = document.getElementById("fileList");
     const carpetas = archivos.filter(f => f.key.endsWith('/'));
-
-    //const carpetas = archivos.filter(f => f.key.endsWith('/') && f.size === 0);
-  //  const archivosSueltos = archivos.filter(f => !f.key.endsWith('/') && f.key !== '.init');
-const archivosSueltos = archivos.filter(f =>
-  !f.key.endsWith('/') &&
-  f.key !== '.init' &&
-  !f.key.endsWith('/.init.txt')
-);
+    const archivosSueltos = archivos.filter(f =>
+      !f.key.endsWith('/') &&
+      f.key !== '.init' &&
+      !f.key.endsWith('/.init.txt')
+    );
 
     fileList.innerHTML = `
       ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
       ${carpetas.map(c => `
         <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
       `).join('')}
-      ${archivosSueltos.map(f => `
-        <li>
-          <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${f.key.replace(currentPath, '')}</strong><br>
-          <button onclick="descargarArchivo('${f.key}')">Descargar</button>
-          <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
-          <button onclick="compartirArchivo('${f.key}')">Compartir</button>
-          <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
-        </li>
-      `).join('')}
+      ${archivosSueltos.map(f => {
+        const nombre = f.key.replace(currentPath, '');
+        const ext = nombre.split('.').pop().toLowerCase();
+        const esImagen = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
+        const esVideo = ['mp4', 'webm', 'ogg'].includes(ext);
+
+        let preview = '';
+
+        if (esImagen) {
+          preview = `<img data-key="${f.key}" style="max-width:100px;max-height:100px;">`;
+        } else if (esVideo) {
+          preview = `<video data-key="${f.key}" autoplay muted loop style="max-width:100px;max-height:100px;"></video>`;
+        } else {
+          preview = `<span style="font-size: 32px;">📄</span>`;
+        }
+
+        return `
+          <li>
+            ${preview}<br>
+            <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">${nombre}</strong><br>
+            <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+            <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+            <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+            <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+          </li>
+        `;
+      }).join('')}
     `;
+
+    archivosSueltos.forEach(async (f) => {
+      const url = await Storage.get(f.key, { level: 'private' });
+      const imgEl = document.querySelector(`img[data-key="${f.key}"]`);
+      const videoEl = document.querySelector(`video[data-key="${f.key}"]`);
+      if (imgEl) imgEl.src = url;
+      if (videoEl) videoEl.src = url;
+    });
+
   } catch (error) {
     console.error("Error al listar archivos:", error);
   }
 }
+//////////////////////////////////////////
 
 
   window.abrirArchivo = async function(nombreArchivo) {
