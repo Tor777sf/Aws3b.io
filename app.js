@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //await Storage.put("nombreCar", "test", { level: "private" });
 
         obtenerArchivos();
-        listadoCompleto = archivos;
+        
 
         document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
       } catch (error) {
@@ -121,6 +121,7 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
 
 async function obtenerArchivos() {
   try {
+    listadoCompleto = archivos;
     const archivos = await Storage.list(currentPath, { level: 'private' });
     const fileList = document.getElementById("fileList");
     const carpetas = archivos.filter(f => f.key.endsWith('/'));
