@@ -326,6 +326,12 @@ for (const f of archivosFiltrados) {
   `;
 }
 
+function obtenerTipoArchivo(nombre) {
+  const ext = nombre.split('.').pop().toLowerCase();
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) return 'imagen';
+  if (['mp4', 'webm', 'mov'].includes(ext)) return 'video';
+  return 'otro';
+}
 
   
 });
