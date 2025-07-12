@@ -117,8 +117,9 @@ async function obtenerArchivos() {
   try {
     const archivos = await Storage.list(currentPath, { level: 'private' });
     const fileList = document.getElementById("fileList");
+    const carpetas = archivos.filter(f => f.key.endsWith('/'));
 
-    const carpetas = archivos.filter(f => f.key.endsWith('/') && f.size === 0);
+    //const carpetas = archivos.filter(f => f.key.endsWith('/') && f.size === 0);
   //  const archivosSueltos = archivos.filter(f => !f.key.endsWith('/') && f.key !== '.init');
 const archivosSueltos = archivos.filter(f =>
   !f.key.endsWith('/') &&
