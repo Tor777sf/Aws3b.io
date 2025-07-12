@@ -135,25 +135,50 @@ const archivosSueltos = archivos.filter(f =>
   !f.key.endsWith('/.init.txt')
 );
 
-    fileList.innerHTML = `
-      ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
-      ${carpetas.map(c => `
-        <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
-      `).join('')}
-      ${archivosSueltos.map(f => `
-        <li>
-          <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${f.key.replace(currentPath, '')}</strong><br>
-          <button onclick="descargarArchivo('${f.key}')">Descargar</button>
-          <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
-          <button onclick="compartirArchivo('${f.key}')">Compartir</button>
-          <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
-        </li>
-      `).join('')}
+fileList.innerHTML = `
+  ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
+  ${carpetas.map(c => `
+    <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
+  `).join('')}
+  ${archivosSueltos.map(f => {
+    const nombre = f.key.replace(currentPath, '');
+    const idPreview = "prev-" + f.key.replace(/[^a-zA-Z0-9]/g, '');
+    return `
+      <li>
+        <div class="preview" id="${idPreview}">Cargando vista previa...</div>
+        <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${nombre}</strong><br>
+        <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+        <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+        <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+        <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+      </li>
     `;
-  } catch (error) {
-    console.error("Error al listar archivos:", error);
+  }).join('')}
+`;
+
+// Generar vistas previas (como en filtrarListado)
+for (const f of archivosSueltos) {
+  const tipo = obtenerTipoArchivo(f.key);
+  const id = "prev-" + f.key.replace(/[^a-zA-Z0-9]/g, '');
+  const contenedor = document.getElementById(id);
+
+  try {
+    const url = await Storage.get(f.key, { level: 'private' });
+
+    if (tipo === 'imagen') {
+      contenedor.innerHTML = `<img src="${url}" style="max-width: 100px; max-height: 100px; border-radius: 6px;" />`;
+    } else if (tipo === 'video') {
+      contenedor.innerHTML = `
+        <video src="${url}" width="120" height="80" muted playsinline preload="metadata" style="border-radius: 6px;"></video>
+      `;
+    } else {
+      contenedor.innerHTML = `<span style="font-size: 2rem;">📄</span>`;
+    }
+  } catch (e) {
+    contenedor.innerHTML = '🧩';
   }
 }
+
 
 
   window.abrirArchivo = async function(nombreArchivo) {
