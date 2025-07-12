@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const user = await Auth.currentAuthenticatedUser();
         mostrarEstado("¡Autenticación exitosa!", "Ya puedes subir y ver tus archivos.");
         await crearCarpetaSiNoExiste();
-        await Storage.put("nombreCar", "test", { level: "private" });
+        //await Storage.put("nombreCar", "test", { level: "private" });
 
         obtenerArchivos();
         document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
@@ -119,7 +119,12 @@ async function obtenerArchivos() {
     const fileList = document.getElementById("fileList");
 
     const carpetas = archivos.filter(f => f.key.endsWith('/') && f.size === 0);
-    const archivosSueltos = archivos.filter(f => !f.key.endsWith('/') && f.key !== '.init');
+  //  const archivosSueltos = archivos.filter(f => !f.key.endsWith('/') && f.key !== '.init');
+const archivosSueltos = archivos.filter(f =>
+  !f.key.endsWith('/') &&
+  f.key !== '.init' &&
+  !f.key.endsWith('/.init.txt')
+);
 
     fileList.innerHTML = `
       ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
