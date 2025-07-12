@@ -284,74 +284,18 @@ window.filtrarListado = function() {
     ${carpetasFiltradas.map(c => `
       <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
     `).join('')}
-    
-window.filtrarListado = async function () {
-  const texto = document.getElementById("buscador").value.toLowerCase();
-  const fileList = document.getElementById("fileList");
-
-  const carpetas = listadoCompleto.filter(f => f.key.endsWith('/'));
-  const archivosSueltos = listadoCompleto.filter(f =>
-    !f.key.endsWith('/') &&
-    f.key !== '.init' &&
-    !f.key.endsWith('/.init.txt')
-  );
-
-  const carpetasFiltradas = carpetas.filter(c => c.key.toLowerCase().includes(texto));
-  const archivosFiltrados = archivosSueltos.filter(a => a.key.toLowerCase().includes(texto));
-
-  // 🔹 1. Construimos el HTML
-  fileList.innerHTML = `
-    ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
-    ${carpetasFiltradas.map(c => `
-      <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
+    ${archivosFiltrados.map(f => `
+      <li>
+        <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${f.key.replace(currentPath, '')}</strong><br>
+        <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+        <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+        <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+        <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+      </li>
     `).join('')}
-    ${archivosFiltrados.map(f => {
-      const nombre = f.key.replace(currentPath, '');
-      const idPreview = "prev-" + f.key.replace(/[^a-zA-Z0-9]/g, '');
-      return `
-        <li>
-          <div class="preview" id="${idPreview}">Cargando vista previa...</div>
-          <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${nombre}</strong><br>
-          <button onclick="descargarArchivo('${f.key}')">Descargar</button>
-          <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
-          <button onclick="compartirArchivo('${f.key}')">Compartir</button>
-          <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
-        </li>
-      `;
-    }).join('')}
   `;
-
-  // 🔹 2. Cargamos vistas previas después de insertar el HTML
-  for (const f of archivosFiltrados) {
-    const tipo = obtenerTipoArchivo(f.key);
-    const id = "prev-" + f.key.replace(/[^a-zA-Z0-9]/g, '');
-    const contenedor = document.getElementById(id);
-
-    try {
-      const url = await Storage.get(f.key, { level: 'private' });
-
-      if (tipo === 'imagen') {
-        contenedor.innerHTML = `<img src="${url}" style="max-width: 100px; max-height: 100px; border-radius: 6px;" />`;
-      } else if (tipo === 'video') {
-        contenedor.innerHTML = `
-          <video src="${url}" width="120" height="80" muted playsinline preload="metadata" style="border-radius: 6px;"></video>
-        `;
-      } else {
-        contenedor.innerHTML = `<span style="font-size: 2rem;">📄</span>`;
-      }
-    } catch (e) {
-      contenedor.innerHTML = '🧩';
-    }
-  }
-};
-
-
-function obtenerTipoArchivo(nombre) {
-  const ext = nombre.split('.').pop().toLowerCase();
-  if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) return 'imagen';
-  if (['mp4', 'webm', 'mov'].includes(ext)) return 'video';
-  return 'otro';
 }
+
 
   
 });
