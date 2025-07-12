@@ -95,7 +95,9 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
     progressBar.style.width = '0%';
 
     try {
-      await Storage.put(file.name, file, {
+      //await Storage.put(file.name, file, {
+      await Storage.put(currentPath + file.name, file, {
+        
         level: 'private',
         contentType: file.type,
         progressCallback(progress) {
