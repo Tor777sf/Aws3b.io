@@ -299,6 +299,27 @@ ${archivosFiltrados.map(f => {
     </li>
   `;
 }).join('')}
+for (const f of archivosFiltrados) {
+  const tipo = obtenerTipoArchivo(f.key);
+  const id = "prev-" + f.key.replace(/[^a-zA-Z0-9]/g, '');
+  const contenedor = document.getElementById(id);
+
+  try {
+    const url = await Storage.get(f.key, { level: 'private' });
+
+    if (tipo === 'imagen') {
+      contenedor.innerHTML = `<img src="${url}" style="max-width: 100px; max-height: 100px; border-radius: 6px;" />`;
+    } else if (tipo === 'video') {
+      contenedor.innerHTML = `
+        <video src="${url}" width="120" height="80" muted playsinline preload="metadata" style="border-radius: 6px;"></video>
+      `;
+    } else {
+      contenedor.innerHTML = `<span style="font-size: 2rem;">📄</span>`;
+    }
+  } catch (e) {
+    contenedor.innerHTML = '🧩';
+  }
+}
 
 
 
