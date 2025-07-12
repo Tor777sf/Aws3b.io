@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
         //await Storage.put("nombreCar", "test", { level: "private" });
 
         obtenerArchivos();
+        listadoCompleto = archivos;
+
         document.getElementById("uploadBtn").addEventListener("click", subirArchivo);
       } catch (error) {
         console.error("Error obteniendo usuario:", error);
