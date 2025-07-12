@@ -284,15 +284,24 @@ window.filtrarListado = function() {
     ${carpetasFiltradas.map(c => `
       <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
     `).join('')}
-    ${archivosFiltrados.map(f => `
-      <li>
-        <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${f.key.replace(currentPath, '')}</strong><br>
-        <button onclick="descargarArchivo('${f.key}')">Descargar</button>
-        <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
-        <button onclick="compartirArchivo('${f.key}')">Compartir</button>
-        <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
-      </li>
-    `).join('')}
+    
+${archivosFiltrados.map(f => {
+  const nombre = f.key.replace(currentPath, '');
+  const idPreview = "prev-" + f.key.replace(/[^a-zA-Z0-9]/g, ''); // para evitar caracteres raros
+  return `
+    <li>
+      <div class="preview" id="${idPreview}">Cargando vista previa...</div>
+      <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${nombre}</strong><br>
+      <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+      <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+      <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+      <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+    </li>
+  `;
+}).join('')}
+
+
+
   `;
 }
 
