@@ -262,6 +262,37 @@ window.crearCarpeta = async function() {
   }
 }
 
+window.filtrarListado = function() {
+  const texto = document.getElementById("buscador").value.toLowerCase();
+  const fileList = document.getElementById("fileList");
+
+  const archivos = listadoCompleto;
+  const carpetas = archivos.filter(f => f.key.endsWith('/'));
+  const archivosSueltos = archivos.filter(f =>
+    !f.key.endsWith('/') &&
+    f.key !== '.init' &&
+    !f.key.endsWith('/.init.txt')
+  );
+
+  const carpetasFiltradas = carpetas.filter(c => c.key.toLowerCase().includes(texto));
+  const archivosFiltrados = archivosSueltos.filter(a => a.key.toLowerCase().includes(texto));
+
+  fileList.innerHTML = `
+    ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
+    ${carpetasFiltradas.map(c => `
+      <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
+    `).join('')}
+    ${archivosFiltrados.map(f => `
+      <li>
+        <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${f.key.replace(currentPath, '')}</strong><br>
+        <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+        <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+        <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+        <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+      </li>
+    `).join('')}
+  `;
+}
 
 
   
