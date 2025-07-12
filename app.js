@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  let listadoCompleto = []; // Guardará todos los archivos y carpetas
+
   const Amplify = aws_amplify.Amplify;
   const Auth = aws_amplify.Auth;
   const Storage = aws_amplify.Storage;
