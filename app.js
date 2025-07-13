@@ -133,6 +133,7 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
       !f.key.endsWith('/.init.txt')
     );
 
+    // Generar el HTML
     fileList.innerHTML = `
       ${currentPath ? '<li><button onclick="irAtras()">🔙 Atrás</button></li>' : ''}
       ${carpetas.map(c => `
@@ -147,9 +148,9 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
         let preview = '';
 
         if (esImagen) {
-          preview = `<img data-key="${f.key}" style="max-width:100px;max-height:100px;">`;
+          preview = `<img class="lazy-media" data-key="${f.key}" data-tipo="img" style="max-width:100px;max-height:100px;">`;
         } else if (esVideo) {
-          preview = `<video data-key="${f.key}" autoplay muted loop style="max-width:100px;max-height:100px;"></video>`;
+          preview = `<video class="lazy-media" data-key="${f.key}" data-tipo="video" autoplay muted loop style="max-width:100px;max-height:100px;"></video>`;
         } else {
           preview = `<span style="font-size: 32px;">📄</span>`;
         }
@@ -167,18 +168,40 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
       }).join('')}
     `;
 
-    archivosSueltos.forEach(async (f) => {
-      const url = await Storage.get(f.key, { level: 'private' });
-      const imgEl = document.querySelector(`img[data-key="${f.key}"]`);
-      const videoEl = document.querySelector(`video[data-key="${f.key}"]`);
-      if (imgEl) imgEl.src = url;
-      if (videoEl) videoEl.src = url;
+    // Observer para lazy load
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(async entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const key = el.dataset.key;
+          const tipo = el.dataset.tipo;
+
+          try {
+            const url = await Storage.get(key, { level: 'private' });
+            if (tipo === 'img') {
+              el.src = url;
+            } else if (tipo === 'video') {
+              el.src = url;
+            }
+            obs.unobserve(el); // deja de observar después de cargar
+          } catch (e) {
+            console.error("Error cargando preview:", key, e);
+          }
+        }
+      });
+    }, {
+      rootMargin: "100px",
+      threshold: 0.1
     });
+
+    // Activar el observer sobre cada imagen/video
+    document.querySelectorAll(".lazy-media").forEach(el => observer.observe(el));
 
   } catch (error) {
     console.error("Error al listar archivos:", error);
   }
 }
+
 //////////////////////////////////////////
 
 
