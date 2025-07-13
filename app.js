@@ -118,6 +118,35 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
       document.getElementById("progressContainer").style.display = 'none';
     }
   }
+//----------------+--------------++++
+function activarLazyMedia() {
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(async entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const key = el.dataset.key;
+        const tipo = el.dataset.tipo;
+
+        try {
+          const url = await Storage.get(key, { level: 'private' });
+          if (tipo === 'img') {
+            el.src = url;
+          } else if (tipo === 'video') {
+            el.src = url;
+          }
+          obs.unobserve(el);
+        } catch (e) {
+          console.error("Error cargando preview:", key, e);
+        }
+      }
+    });
+  }, {
+    rootMargin: "100px",
+    threshold: 0.1
+  });
+
+  document.querySelectorAll(".lazy-media").forEach(el => observer.observe(el));
+}
 
 ////////////////////////////////)//////////////
   async function obtenerArchivos() {
