@@ -199,7 +199,10 @@ function activarLazyMedia() {
 
     // Observer para lazy load
     activarLazyMedia();
-    
+     } catch (error) {
+    console.error("Error al listar archivos:", error);
+  }
+  } 
 //////////////////////////////////////////
 
 
