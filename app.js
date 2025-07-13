@@ -331,37 +331,17 @@ window.filtrarListado = function() {
     ${carpetasFiltradas.map(c => `
       <li><strong style="cursor:pointer" onclick="entrarCarpeta('${c.key}')">📁 ${c.key.replace(currentPath, '').replace('/', '')}</strong></li>
     `).join('')}
-    ${archivosFiltrados.map(f => {
-      const nombre = f.key.replace(currentPath, '');
-      const ext = nombre.split('.').pop().toLowerCase();
-      const esImagen = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
-      const esVideo = ['mp4', 'webm', 'ogg'].includes(ext);
-
-      let preview = '';
-
-      if (esImagen) {
-        preview = `<img class="lazy-media" data-key="${f.key}" data-tipo="img" style="max-width:100px;max-height:100px;">`;
-      } else if (esVideo) {
-        preview = `<video class="lazy-media" data-key="${f.key}" data-tipo="video" autoplay muted loop style="max-width:100px;max-height:100px;"></video>`;
-      } else {
-        preview = `<span style="font-size: 32px;">📄</span>`;
-      }
-
-      return `
-        <li>
-          ${preview}<br>
-          <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">${nombre}</strong><br>
-          <button onclick="descargarArchivo('${f.key}')">Descargar</button>
-          <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
-          <button onclick="compartirArchivo('${f.key}')">Compartir</button>
-          <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
-        </li>
-      `;
-    }).join('')}
+    ${archivosFiltrados.map(f => `
+      <li>
+        <strong style="cursor:pointer" onclick="abrirArchivo('${f.key}')">📄 ${f.key.replace(currentPath, '')}</strong><br>
+        <button onclick="descargarArchivo('${f.key}')">Descargar</button>
+        <button onclick="renombrarArchivo('${f.key}')">Renombrar</button>
+        <button onclick="compartirArchivo('${f.key}')">Compartir</button>
+        <button onclick="eliminarArchivo('${f.key}')">Eliminar</button>
+      </li>
+    `).join('')}
   `;
-
-  activarLazyMedia(); // 🔄 Activar carga diferida de imágenes y videos visibles
-};
+}
 
 
   
