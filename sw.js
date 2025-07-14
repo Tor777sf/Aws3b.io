@@ -1,12 +1,12 @@
 // sw.js
 const CACHE_NAME = 'HmiPWAcacheV1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/callback.html',
-  '/app.js',
-  '/ImgA1.jpeg',
-  '/ImgA2.jpeg'
+  '/Aws3b.io/',
+  '/Aws3b.io/index.html',
+  '/Aws3b.io/callback.html',
+  '/Aws3b.io/app.js',
+  '/Aws3b.io/ImgA1.jpeg',
+  '/Aws3b.io/ImgA2.jpeg'
 ];
 
 self.addEventListener('install', event => {
