@@ -36,5 +36,15 @@
     <p>Por favor, inicia sesión para acceder a tu gestor de archivos seguro.</p>
     <button onclick="login()">Iniciar sesión</button>
   </main>
+<!-- Registro del Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/Aws3b.io/sw.js')
+          .then(reg => console.log('✅ Service Worker registrado', reg))
+          .catch(err => console.error('❌ Error al registrar SW', err));
+      });
+    }
+  </script>
 </body>
 </html>
