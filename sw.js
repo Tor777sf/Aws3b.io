@@ -5,8 +5,8 @@ const urlsToCache = [
   '/index.html',
   '/callback.html',
   '/app.js',
-  '/imgA1.jpeg',
-  '/imgA2.jpeg'
+  '/ImgA1.jpeg',
+  '/ImgA2.jpeg'
 ];
 
 self.addEventListener('install', event => {
