@@ -1,7 +1,7 @@
 {
   "name": "Hi",
   "short_name": "AppHI",
-  "start_url": "https://github.com/Tor777sf/Aws3b.io/",
+  "start_url": "/Aws3b.io/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007bff",
@@ -9,12 +9,12 @@
     {
       "src": "ImgA1.jpeg",
       "sizes": "any",
-      "type": "ImgA1/jpeg"
+      "type": "image/jpeg"
     },
     {
       "src": "ImgA2.jpeg",
       "sizes": "any",
-      "type": "ImgA2/jpeg"
+      "type": "image/jpeg"
     }
   ]
 }
