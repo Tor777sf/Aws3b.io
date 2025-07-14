@@ -1,6 +1,6 @@
 {
-  "name": "Mi PWA",
-  "short_name": "AppPWA",
+  "name": "Hi",
+  "short_name": "AppHI",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
