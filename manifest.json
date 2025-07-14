@@ -1,20 +1,20 @@
 {
   "name": "Hi",
   "short_name": "AppHI",
-  "start_url": "https://github.com/Tor777sf/Aws3b.io",
+  "start_url": "https://github.com/Tor777sf/Aws3b.io/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007bff",
   "icons": [
     {
       "src": "imgA1.jpeg",
-      "sizes": "192x192",
-      "type": "image/png"
+      "sizes": "any",
+      "type": "imgA1/jpeg"
     },
     {
       "src": "imgA2.jpeg",
-      "sizes": "512x512",
-      "type": "image/png"
+      "sizes": "any",
+      "type": "imgA2/jpeg"
     }
   ]
 }
