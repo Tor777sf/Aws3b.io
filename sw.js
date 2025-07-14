@@ -1,12 +1,12 @@
 // sw.js
-const CACHE_NAME = 'mi-pwa-cache-v1';
+const CACHE_NAME = 'HmiPWAcacheV1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/styles.css',
+  '/callback.html',
   '/app.js',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/imgA1.jpeg',
+  '/imgA2.jpeg'
 ];
 
 self.addEventListener('install', event => {
