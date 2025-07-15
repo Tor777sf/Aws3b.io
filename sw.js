@@ -5,8 +5,8 @@ const urlsToCache = [
   '/Aws3b.io/index.html',
   '/Aws3b.io/callback.html',
   '/Aws3b.io/app.js',
-  '/Aws3b.io/ImgA1.jpeg',
-  '/Aws3b.io/ImgA2.jpeg'
+  '/Aws3b.io/MickA1.png',
+  '/Aws3b.io/PicA2.png'
 ];
 
 self.addEventListener('install', event => {
