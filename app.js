@@ -241,25 +241,23 @@ window.compartirArchivo = async function(nombreArchivo) {
       level: 'private',
       expires: 3600 // 1 hora
     });
-    if (window.Android && window.Android.share) {
-  window.Android.share(url);
-} else if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
-  await navigator.share({
-    title: "Archivo compartido",
-    text: "Te comparto este archivo:",
-    url: url
-  });
 
-    ///if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
-      // 📱 Móvil con soporte para navigator.share
-     /// await navigator.share({
-   ///     title: "Archivo compartido",
-   ///     text: "Te comparto este archivo:",
-       /// url: url
-     /// });
+    // 📱 Si estamos en WebView con puente nativo
+    if (window.Android && typeof window.Android.share === "function") {
+      window.Android.share(url);
+      mostrarEstado("Compartido", "Enlace compartido desde la app.");
+    
+    // 📱 Si estamos en navegador móvil con soporte
+    } else if (navigator.share && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      await navigator.share({
+        title: "Archivo compartido",
+        text: "Te comparto este archivo:",
+        url: url
+      });
       mostrarEstado("Compartido", "El enlace fue enviado correctamente.");
+    
+    // 🖥️ Caso de escritorio o navegador sin soporte
     } else {
-      // 🖥️ Escritorio u otro navegador sin share nativo
       await navigator.clipboard.writeText(url);
       mostrarEstado("Enlace copiado", "Tu navegador no soporta compartir directo, pero el enlace fue copiado.");
     }
@@ -269,6 +267,7 @@ window.compartirArchivo = async function(nombreArchivo) {
     mostrarEstado("Error", "No se pudo generar o compartir el enlace.");
   }
 };
+
 
 
 window.eliminarArchivo = async function(nombreArchivo) {
