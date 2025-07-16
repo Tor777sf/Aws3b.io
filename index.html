@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicio de sesión</title>
+ 
+  <!-- pwa
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#007bff">
-
+  -->
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/aws-amplify@3.3.27/dist/aws-amplify.min.js"></script>
   <script defer src="app.js"></script>
@@ -36,7 +38,7 @@
     <p>Por favor, inicia sesión para acceder a tu gestor de archivos seguro.</p>
     <button onclick="login()">Iniciar sesión</button>
   </main>
-<!-- Registro del Service Worker -->
+<!-- Registro del Service Worker 
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -46,5 +48,7 @@
       });
     }
   </script>
+  -->
+  
 </body>
 </html>
